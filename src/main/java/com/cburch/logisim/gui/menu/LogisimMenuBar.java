@@ -86,6 +86,7 @@ public class LogisimMenuBar extends JMenuBar {
   public final MenuEdit edit;
   public final MenuProject project;
   public final MenuSimulate simulate;
+  public final MenuNetwork network;
   public final MenuHelp help;
   public final MenuFpga fpga;
   private final LFrame parent;
@@ -109,6 +110,7 @@ public class LogisimMenuBar extends JMenuBar {
     add(project = new MenuProject(this));
     add(simulate = new MenuSimulate(this));
     add(fpga = new MenuFpga(parent, this, saveProj));
+    add(network = new MenuNetwork(this));
     add(new WindowMenu(parent));
     add(help = new MenuHelp(this));
 
@@ -211,6 +213,7 @@ public class LogisimMenuBar extends JMenuBar {
       project.localeChanged();
       fpga.localeChanged();
       simulate.localeChanged();
+      network.localeChanged();
       help.localeChanged();
     }
   }
