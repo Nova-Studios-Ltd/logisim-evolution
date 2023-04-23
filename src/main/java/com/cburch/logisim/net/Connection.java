@@ -34,9 +34,8 @@ public class Connection extends Thread {
 
         while (!this.socket.isClosed()) {
             try {
-                if (!reader.ready()) continue;
                 data = reader.readLine();
-
+                if (data == null) break;
                 this.print(data, false);
             }
             catch (IOException ex) {

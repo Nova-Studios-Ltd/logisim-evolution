@@ -1,15 +1,16 @@
 package com.cburch.logisim.net;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class Client extends SocketWrapper {
     Socket socket;
-    DataOutputStream outputStream;
-    OutputStreamWriter outputWriter;
+
+    OutputStreamWriter outputStream;
+
+    BufferedWriter outputWriter;
 
     /**
      * <p>Creates a new client instance.</p>
@@ -34,8 +35,8 @@ public class Client extends SocketWrapper {
         this.socket = new Socket();
         try {
             this.socket.connect(new InetSocketAddress(this.address, this.port));
-            this.outputStream = new DataOutputStream(this.socket.getOutputStream());
-            this.outputWriter = new OutputStreamWriter(this.outputStream);
+            this.outputStream = new OutputStreamWriter(this.socket.getOutputStream());
+            this.outputWriter = new BufferedWriter(this.outputStream);
             System.out.printf("Connected to %s:%s%n", this.address, this.port);
             return true;
         }
@@ -47,10 +48,13 @@ public class Client extends SocketWrapper {
 
     public void send(String message) {
         if (this.socket == null || !this.socket.isConnected() || this.socket.isClosed()) return;
-        if (this.outputStream == null || this.outputWriter == null) return;
+        if (this.outputStream == null) return;
 
         try {
             this.outputWriter.write(message);
+            this.outputWriter.newLine();
+            this.outputWriter.flush();
+            System.out.println("Wrote message.");
         }
         catch (IOException ex) {
             System.out.println("Couldn't send message.");
