@@ -9,6 +9,7 @@
 
 package com.cburch.logisim.gui.menu;
 
+import com.cburch.logisim.net.Client;
 import com.cburch.logisim.net.Server;
 
 import javax.swing.*;
@@ -25,6 +26,11 @@ class MenuNetwork extends JMenu implements ActionListener {
   private final JMenuItem startServer = new JMenuItem();
   private final JMenuItem stopServer = new JMenuItem();
 
+  private final JSeparator separator1 = new JSeparator();
+
+  private final JMenuItem testConnect = new JMenuItem();
+
+
   private Server server;
 
   public MenuNetwork(LogisimMenuBar menubar) {
@@ -32,9 +38,12 @@ class MenuNetwork extends JMenu implements ActionListener {
 
     startServer.addActionListener(this);
     stopServer.addActionListener(this);
+    testConnect.addActionListener(this);
 
     this.add(startServer);
     this.add(stopServer);
+    this.add(separator1);
+    this.add(testConnect);
   }
 
   @Override
@@ -44,7 +53,7 @@ class MenuNetwork extends JMenu implements ActionListener {
       System.out.println("Pseudostarted Server");
       if (server == null) {
         server = new Server("", -1);
-        if (server.Init()) {
+        if (server.init()) {
           server.listen();
         }
       }
@@ -60,11 +69,17 @@ class MenuNetwork extends JMenu implements ActionListener {
           server = null;
         }
     }
+    else if (src == testConnect) {
+      Client client = new Client(null, -1);
+      client.connect();
+      client.send("Hi");
+    }
   }
 
   public void localeChanged() {
     this.setText(S.get("networkMenu"));
     startServer.setText(S.get("networkStartServerItem"));
     stopServer.setText(S.get("networkStopServerItem"));
+    testConnect.setText(S.get("networkTestConnectItem"));
   }
 }

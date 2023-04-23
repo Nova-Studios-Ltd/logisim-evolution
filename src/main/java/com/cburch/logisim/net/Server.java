@@ -4,17 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 
-/**
- * <p>A wrapper for ServerSocket that focuses on handling synchronizing editor actions between clients.</p>
- * <br />
- * <p>LiveShare&reg; for Logisim if you will.</p>
- */
-public class Server {
-    public final static String DEFAULT_LISTEN_ADDR = "127.0.0.1";
-    public final static int DEFAULT_LISTEN_PORT = 5217;
-
-    private final String Address;
-    private final int Port;
+public class Server extends SocketWrapper {
 
     private ServerSocket Socket;
 
@@ -32,8 +22,8 @@ public class Server {
      * @param port the port that this server will bind to on the corresponding interface
      */
     public Server(String address, int port) {
-        this.Address = (address != null && address.length() > 0) ? address : DEFAULT_LISTEN_ADDR;
-        this.Port = (port > 0 && port < 65536) ? port : DEFAULT_LISTEN_PORT;
+        this.address = (address != null && address.length() > 0) ? address : DEFAULT_LISTEN_ADDR;
+        this.port = (port > 0 && port < 65536) ? port : DEFAULT_LISTEN_PORT;
     }
 
     /**
@@ -43,11 +33,11 @@ public class Server {
      * <p>Will return false if the socket is already initialized or if an exception is encountered.</p>
      * @return a boolean indicating whether the server initialized successfully
      */
-    public boolean Init() {
+    public boolean init() {
         if (this.Socket != null) return false; // Already initialized
         try {
             this.Socket = new ServerSocket();
-            this.Socket.bind(new InetSocketAddress(this.Address, this.Port));
+            this.Socket.bind(new InetSocketAddress(this.address, this.port));
             return true;
         }
         catch (IOException | IllegalArgumentException | SecurityException ex) {

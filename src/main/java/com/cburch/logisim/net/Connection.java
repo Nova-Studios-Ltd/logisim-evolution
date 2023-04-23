@@ -15,6 +15,8 @@ public class Connection extends Thread {
         InputStream inputStream = null;
         BufferedReader reader = null;
 
+        this.print("New client connected", true);
+
         try {
             inputStream = this.socket.getInputStream();
 
@@ -48,7 +50,7 @@ public class Connection extends Thread {
         }
         catch (IOException ignored) { }
 
-        this.print("Closed", true);
+        this.print("Client disconnected", true);
     }
 
     public void close() throws IOException {
