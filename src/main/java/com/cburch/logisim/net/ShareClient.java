@@ -3,9 +3,8 @@ package com.cburch.logisim.net;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
-public class Client extends SocketWrapper {
+public class ShareClient extends SocketWrapper {
     Socket socket;
 
     OutputStreamWriter outputStream;
@@ -25,7 +24,7 @@ public class Client extends SocketWrapper {
      * @param address the address that the client will try to connect to
      * @param port the port to use on the corresponding address
      */
-    public Client(String address, int port) {
+    public ShareClient(String address, int port) {
         this.address = (address != null && address.length() > 0) ? address : DEFAULT_LISTEN_ADDR;
         this.port = (port > 0 && port < 65536) ? port : DEFAULT_LISTEN_PORT;
     }

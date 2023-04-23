@@ -9,13 +9,12 @@
 
 package com.cburch.logisim.gui.menu;
 
-import com.cburch.logisim.net.Client;
-import com.cburch.logisim.net.Server;
+import com.cburch.logisim.net.ShareClient;
+import com.cburch.logisim.net.ShareServer;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import static com.cburch.logisim.gui.Strings.S;
 
@@ -31,7 +30,7 @@ class MenuNetwork extends JMenu implements ActionListener {
   private final JMenuItem testConnect = new JMenuItem();
 
 
-  private Server server;
+  private ShareServer server;
 
   public MenuNetwork(LogisimMenuBar menubar) {
     this.menubar = menubar;
@@ -51,26 +50,20 @@ class MenuNetwork extends JMenu implements ActionListener {
     final var src = e.getSource();
     if (src == startServer) {
       if (server == null) {
-        server = new Server("", -1);
-        System.out.println("Started Server");
+        server = new ShareServer("", -1);
         if (server.init()) {
-          server.listen();
+          server.start();
         }
       }
     }
     else if (src == stopServer) {
         if (server != null) {
-          try {
-            server.close();
-            System.out.println("Stopped Server");
-          } catch (IOException ex) {
-            System.out.println("Couldn't stop the internal socket, ignoring...");
-          }
+          server.stop();
           server = null;
         }
     }
     else if (src == testConnect) {
-      Client client = new Client(null, -1);
+      ShareClient client = new ShareClient(null, -1);
       client.connect();
       client.send("Hi");
     }
